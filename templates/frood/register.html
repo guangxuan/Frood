@@ -1,0 +1,55 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+{%block body_block%}
+        <h1>Register with Frood</h1>
+
+        {% if registered %}
+           <div class="panel panel-success">
+				<div class="panel-heading">
+					<h3 class="panel-title">Welcome, {{ user.username }}! You are already registered.</h3>
+				</div>
+				<div class="panel-body">
+					<a class="list-group-item list-group-item-info" href="/frood/login/#content_block">Return to the homepage.</a><br />
+				</div>
+			</div>
+        {% else %}
+		<form id="user_form" method="post" action="/frood/register/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <!-- Display each form. The as_p method wraps each element in a paragraph
+                 (<p>) element. This ensures each element appears on a new line,
+                 making everything look neater. -->
+			<div class="input-group input-group-lg">
+				<input type="text" id="id_username" maxlength="30" name="username" class="form-control" placeholder="Username - 30 characters or fewer.">
+				<span class="input-group-addon">Required</span>
+			</div>
+			<br />
+			<div class="input-group input-group-lg">
+				<input id="id_email" maxlength="75" name="email" type="email" class="form-control" placeholder="youremail@email.com">
+				<span class="input-group-addon">Optional</span>
+			</div>
+			<br />
+			<div class="input-group input-group-lg">
+				<input input id="id_password" name="password" type="password" class="form-control" placeholder="Password">
+				<span class="input-group-addon">Required</span>
+			</div>
+			<br />
+			<div class="input-group input-group-lg">
+				<input id="id_interests" maxlength="200" name="interests" type="text" class="form-control" placeholder="Interests">
+				<span class="input-group-addon">Required</span>
+			</div>
+			<br />
+			<div class="input-group input-group-lg">
+				<input id="id_picture" name="picture" type="file" class="form-control" placeholder="Choose File">
+				<span class="input-group-addon">Optional</span>
+			</div>
+			<br />
+
+            <!-- Provide a button to click to submit the form. -->
+			<button class="btn btn-primary" type="submit" name="submit" value="Register">Register</button>
+        </form>
+        {% endif %}
+{%endblock%}
+

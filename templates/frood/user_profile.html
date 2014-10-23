@@ -1,0 +1,30 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+<!DOCTYPE html>
+{%block body_block%}
+    <img src=media/{{userimg}}>
+    <h1>{{username}}</h1>
+    Interests: {{userinterests}}
+    <br>
+    <h1> Reviews </h1>
+    {% if reviews %}
+		{% for review in reviews %}
+            <!-- Following line changed to add an HTML hyperlink -->
+            <div class="panel panel-warning">
+			    <div class="panel-heading">
+                    <h3 class="panel-title">{{review.title}} - By {{review.fuser.username}}</h3>
+                    <h4 class="panel-title">{{review.description}}</h4>
+			    </div>
+		    </div>
+        {% endfor %}
+        
+	{% else %}
+        <div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">There are no reviews present!</h3>
+			</div>
+		</div>
+    {% endif %}
+    <h3><a class="btn btn-success" href="/frood/u/{{username}}/add_review/#content_block">Add a Review!</a></h3>
+{%endblock%}
+                 

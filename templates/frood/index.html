@@ -1,0 +1,98 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+<!DOCTYPE html>
+{%block body_block%}
+		{% if meetups %}
+		<h1> Meetups </h1>
+        <ul class="list-group">
+		{% for meetup in meetups %}
+            <!-- Following line changed to add an HTML hyperlink -->
+            <li class="list-group-item"><a href="/frood/meetup/{{ meetup.uid }}#content_block">{{ meetup.name }}</a></li>
+        {% endfor %}
+        </ul>
+        
+		{% else %}
+        <div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">There are no Meetups present!</h3>
+			</div>
+		</div>
+        {% endif %}
+		
+		
+		{% if user.is_authenticated %}
+           <a class="list-group-item list-group-item-info" href="/frood/select_location#content_block">Add a Meetup</a>
+        {% else %}
+           <div class="panel panel-danger">
+				<div class="panel-heading">
+					<h3 class="panel-title">You are not logged in!</h3>
+				</div>
+			</div>
+            <a class="list-group-item list-group-item-success" href="/frood/login#content_block">Login</a>
+		    <a class="list-group-item list-group-item-info" href="/frood/register#content_block">Register if you don't have an account</a>
+        {% endif %}
+{%endblock%}
+
+{% block map_block%}
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map_canvas {
+        height: 800px;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+        max-width:none;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+      }
+      .gmnoprint img {
+        max-width: none; 
+        }
+      img {max-width: none;}
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+var locations = {{loc|safe}};
+var map;
+var initialLocation;
+var infowindow = new google.maps.InfoWindow();
+var marker, i;
+function initialize() {
+	if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+    initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+    map.setCenter(initialLocation);
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  }
+  var mapOptions = {
+    zoom: 10,
+    center: new google.maps.LatLng(-33.92, 151.25)
+  };
+  map = new google.maps.Map(document.getElementById('map_canvas'),
+      mapOptions);
+	    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map,
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+					infowindow.setContent('<a href='+'/notes/detail/'+locations[i][0]+'>'+locations[i][0]+'</a>');
+					infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+}
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+   </script>
+<div id="map_canvas"></div>
+{% endblock%}

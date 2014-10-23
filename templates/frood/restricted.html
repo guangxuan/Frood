@@ -1,0 +1,24 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+{%block body_block%}
+		<h1> Restricted Content </h1>
+        {% if user.is_authenticated %}
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">Authenticated:</h3>
+			</div>
+			<div class="panel-body">
+				{{ text }}
+			</div>
+		</div>
+		{% else %}
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">Error:</h3>
+			</div>
+			<div class="panel-body">
+				You are not logged in
+			</div>
+		</div>
+		{% endif %}
+{%endblock%}

@@ -1,0 +1,64 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+<!DOCTYPE html>
+{%block body_block%}
+<h1> Drag marker around </h1>
+<h1> Double click and click on link when done choosing location of meetup </h1>
+{%endblock%}
+
+{% block map_block%}
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map_canvas {
+        height: 800px;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+        max-width:none;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+      }
+      .gmnoprint img {
+        max-width: none; 
+        }
+      img {max-width: none;}
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+var map;
+var infowindow = new google.maps.InfoWindow();
+function initialize() {
+  var mapOptions = {
+    zoom: 10,
+    center: new google.maps.LatLng(-33.92, 151.25)
+  };
+	map = new google.maps.Map(document.getElementById('map_canvas'),
+      mapOptions); 
+	var marker = new google.maps.Marker({
+		position: mapOptions.center,
+		map: map,
+		draggable:true,
+    title:"Drag me!"
+	});
+  google.maps.event.addListener(marker, 'dblclick', function() {
+    infowindow.setContent('<a href='+'/frood/add_meetup/'+marker.getPosition().lat()+'/'+marker.getPosition().lng()+'/>'+'Submit coordinates'+'</a>');
+		infowindow.open(map, marker);
+    map.setCenter(marker.getPosition());
+  });
+  google.maps.event.addListener(marker, 'mouseover', function() {
+    infowindow.setContent('<a href='+'/frood/add_meetup/'+marker.getPosition().lat()+'/'+marker.getPosition().lng()+'/>'+'Submit coordinates'+'</a>');
+  });
+  google.maps.event.addListener(marker, 'mouseout', function() {
+    setTimeout(function(){infowindow.close();}, 1000);
+  });
+}
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+   </script>
+
+<div id="map_canvas"></div>
+{% endblock%}

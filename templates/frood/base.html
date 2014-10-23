@@ -1,0 +1,127 @@
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Frood</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{STATIC_URL}}bootstrap/css/grayscale.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{{STATIC_URL}}bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond./js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="/frood#content_block">
+                    <i class="fa fa-play-circle"></i>  <span class="light">Start</span> Frooding
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    {% if user.is_authenticated %}
+                	<li class="page-scroll"><a href="#page-top">Welcome, {{ user.username }}!</a></li>
+                	<li class="page-scroll"><a href="/frood/restricted#content_block">Restricted</a></li>
+                    <li class="page-scroll"><a href="/frood/select_location#content_block">Add Meetup</a></li>
+                    <li class="page-scroll"><a href="/frood/logout#content_block">Logout</a></li>
+              		{% else %}
+                    <li class="page-scroll">
+                        <a href="/frood/register#content_block">Register</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="/frood/login#content_block">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="brand-heading">Frood</h1>
+                        <p class="intro-text">Made simpler with us</p>
+                        <a href="#content_block" class="btn btn-circle page-scroll">
+                            <i class="fa fa-angle-double-down animated"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section	 -->
+ <header class="intro" id="content_block">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                     {% block body_block%}
+        		 	 {% endblock%}
+                    </div>
+                </div>
+            </div>
+        </div>
+ </header>
+{% block map_block%}
+{% endblock%}
+	<!-- About  -->
+    <section id="download" class="content-section text-center">
+        <div class="download-section">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-6">
+                        <h3>Location</h3>
+                        <p>One Raffles Institution Lane<br>Singapore 575794</p>
+                    </div>
+                    
+                    <div class="footer-col col-md-6">
+                        <h3>About Me</h3>
+                        <p>Desperate for CEP Marks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+{%block body_block%}
+    {% if meetup_exists %}
+        <h1>{{meetup.name}}</h1>
+        <h4>{{meetup.datetime}}</h4>
+        <h4>Hosted by: <a href="/frood/u/{{ meetup.user.username }}#content_block">{{ meetup.user.username }}</a></h4>
+        <h4>Copay: {{meetup.copay}}</h4>
+        <h4>Going:</h4>
+        {% if iusers %}
+            {% for iuser in iusers %}
+                <li class="list-group-item"><a href="/frood/u/{{ iuser.username }}#content_block">{{ iuser.username }}</a></li>
+            {% endfor %}
+        {% else %}
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Nobody is going for the meetup!</h3>
+                </div>
+            </div>
+        {% endif %}
+        <br>
+        {% if ishost %}
+            <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">You're hosting the meetup!</h3>
+                </div>
+            </div>
+            <a class="btn btn-success" href="/frood/meetup/{{meetup.uid}}/delete/">Delete the Meetup!</a>
+        {% else %}
+            {% if isjoin %}
+                <a class="btn btn-warning" href="/frood/meetup/{{meetup.uid}}/quit/">Quit the Meetup!</a>
+            {% else %}
+                <a class="btn btn-success" href="/frood/meetup/{{meetup.uid}}/join/">Join the Meetup!</a>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h1> Meetup Does Not Exist </h1>
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">Error:</h3>
+			</div>
+			<div class="panel-body">
+				{{ text }}
+			</div>
+		</div>
+    {% endif %}
+{%endblock%}
+
+{% block map_block%}
+    {% if meetup_exists %}
+        <h4> Location of meetup: </h4>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <style>
+          #map_canvas {
+            height: 400px;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            max-width:none;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+          }
+          .gmnoprint img {
+            max-width: none; 
+            }
+          img {max-width: none;}
+        </style>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script>
+    var locations = {{loc|safe}};
+    var map;
+    var initialLocation;
+    var infowindow = new google.maps.InfoWindow();
+    var marker, i;
+    function initialize() {
+      var mapOptions = {
+        zoom: 13,
+        center: new google.maps.LatLng(locations[0][1],locations[0][2])
+      };
+      map = new google.maps.Map(document.getElementById('map_canvas'),
+          mapOptions);
+            for (i = 0; i < locations.length; i++) {  
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map,
+          });
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                        infowindow.setContent('<a href='+'/notes/detail/'+locations[i][0]+'>'+locations[i][0]+'</a>');
+                        infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+        infowindow2.setContent('HI');
+        infowindow2.open(map, new google.maps.LatLng(-33.92, 151.25));
+    }
+
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+       </script>
+    <div id="map_canvas"></div>
+    {% endif %}
+{% endblock%}

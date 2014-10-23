@@ -1,0 +1,42 @@
+{% extends 'frood/base.html' %}
+{%load newfilters%}
+{%block body_block%}
+    <h1>Add a review</h1>
+    {% if distinct %}
+        <form id="review_form" method="post" action="/frood/u/{{tuser.username}}/add_review/">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                {% for field in form.visible_fields %}
+                    {% if field.errors %}
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Error(s):</h3>
+                        </div>
+                        <div class="panel-body">
+                            {% for errors in field.errors %}
+                            <tr>{{ errors }}</tr>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label>{{ field.label }}</label>
+                        {{ field |addcss:"class:form-control" }}          
+                    </div>
+                {% endfor %}
+            <button class="btn btn-primary" type="submit" name="submit">Add Review</button>
+        </form>
+    {% else %}
+        <div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">Error: You cannot add a review for yourself</h3>
+			</div>
+        </div>
+    {% endif %}
+{%endblock%}
+
+
+
